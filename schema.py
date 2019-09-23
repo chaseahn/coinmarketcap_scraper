@@ -10,7 +10,7 @@ def run(dbname='coins.db'):
     # create USER table FOR LOGIN AND SESSION
     CUR.execute("""CREATE TABLE coins(
         pk INTEGER PRIMARY KEY AUTOINCREMENT,
-        coinname VARCHAR,
+        name VARCHAR,
         symbol VARCHAR,
         href INTEGER,sqli
         CONSTRAINT unique_coinname UNIQUE(coinname)
