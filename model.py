@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 
 import os
 import time
@@ -19,15 +18,15 @@ class Scraper():
 
     def __init__(self):
 
-        self.url        = 'https://www.coinmarketcap.com'
-        self.coins_href = '/all/views/all/'
+        self.url      = 'https://www.coinmarketcap.com'
+        self.view_all = '/all/views/all/'
     
     def scrape_site(self):
 
         data    = {} #final object for list_to_csv
         coin_id = 0  
 
-        res  = requests.get(self.url + self.coins_href)
+        res  = requests.get(self.url + self.view_all)
         html = BeautifulSoup(res.content, 'html.parser')
 
         if html:
@@ -38,11 +37,19 @@ class Scraper():
 
                 coin_container = coin.find_all('td')
                 
-                coin_name = coin_container[1].text.strip().split('\n')[2]
-                coin_symb = coin_container[1].text.strip().split('\n')[0]
-                coin_href = '/currencies/' + coin_name.lower()
+                coin_name   = coin_container[1].text.strip().split('\n')[2]
+                coin_symbol = coin_container[1].text.strip().split('\n')[0]
+                coin_href   = '/currencies/' + coin_name.lower()
 
-                print([coin_name, coin_symb, coin_href])
+                coin_dict = { 'name': coin_name,
+                              'symbol': coin_symbol, 
+                              'href': coin_href }
+
+                print(coin_dict['name'])
+
+                # db = SQLite()
+                # db.add_coin()
+
 
                 #download image
 
@@ -51,6 +58,9 @@ class Scraper():
                 break
         else:
             print("Couldn't Find")
+
+        def coin_page(self):
+            pass 
 
 class Coins():
 
@@ -77,13 +87,8 @@ class SQLite():
 
     def __init__(self):
         self.path        = ' '
-    
-    def load_dictionary(filename):
-        """imports json file as a dictionary"""
-        with open(filename, 'r') as json_file:
-            return json.load(json_file)
 
-    def run():
+    def add_coin(self, dbname="coins.db", coin_dict):
 
         # open connection to db
         conn = sqlite3.connect(dbname)
@@ -93,18 +98,13 @@ class SQLite():
                      name, symbol, href ) 
                      VALUES (?, ?, ?); """
 
-        # importing the raw data json file created through scraper
-        dcty = load_dictionary(self.path)
+        name   = coin_dict['name']
+        symbol = coin_dict['symbol']
+        href   = coin_dict['href']
 
-        for key in dcty.keys():
-
-            name   = key.strip()
-            symbol = dcty[key]['symbol']
-            href   = dcty[key]['href']
-
-            # populate all values in table
-            sql_values = (name, symbol, href)
-            cur.execute(PARENT_SQL, sql_values)
+        # populate all values in table
+        sql_values = (name, symbol, href)
+        cur.execute(PARENT_SQL, sql_values)
 
         # close connection to db
         conn.commit()
