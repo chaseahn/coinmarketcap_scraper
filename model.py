@@ -44,9 +44,9 @@ class Scraper():
 
                 coin_dict = { 'name': coin_name,
                               'symbol': coin_symbol, 
-                              'href': coin_href.strip() }
+                              'href': coin_href.replace(' ', '-') }
 
-                print('found ' + coin_dict['name'])
+                print('Seeding ' + coin_dict['name'])
 
                 #seed to database
                 db = SQLite()
