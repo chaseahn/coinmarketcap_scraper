@@ -12,14 +12,15 @@ class Scraper():
 
     def __init__(self):
 
-        self.url        = 'https://www.coinmarketcap.com/all/views/all/'
+        self.url        = 'https://www.coinmarketcap.com'
+        self.coins_href = '/all/views/all/'
     
     def scrape_site(self):
 
         data    = {} #final object for list_to_csv
         coin_id = 0  
 
-        res  = requests.get(self.url)
+        res  = requests.get(self.url + self.coins_href)
         html = BeautifulSoup(res.content, 'html.parser')
 
         if html:
