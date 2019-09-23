@@ -1,14 +1,18 @@
-# this is a scraper for coinmarketcap.com
-# the goal of the program is to extract:
-# coin name, symbol and image
+#!/usr/bin/env python3
 
 import os
+import time
 import requests
 
 from bs4 import BeautifulSoup
+from time import sleep
 
 
 class Scraper():
+
+    # this is a scraper for coinmarketcap.com
+    # the goal of the program is to extract:
+    # coin name, symbol and href
 
     def __init__(self):
 
@@ -36,6 +40,8 @@ class Scraper():
                 coin_href = '/currencies/' + coin_name.lower()
 
                 print([coin_name, coin_symb, coin_href])
+
+                #download image
 
                 #seed to database
 
