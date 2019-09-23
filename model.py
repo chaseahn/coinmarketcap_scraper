@@ -1,6 +1,7 @@
 
 import os
 import time
+import sqlite3
 import requests
 
 from time import sleep
@@ -43,21 +44,16 @@ class Scraper():
 
                 coin_dict = { 'name': coin_name,
                               'symbol': coin_symbol, 
-                              'href': coin_href }
+                              'href': coin_href.strip() }
 
-                print(coin_dict['name'])
-
-                # db = SQLite()
-                # db.add_coin()
-
-
-                #download image
+                print('found ' + coin_dict['name'])
 
                 #seed to database
+                db = SQLite()
+                db.add_coin(coin_dict)
 
-                break
         else:
-            print("Couldn't Find")
+            print("Couldn't Find Page.")
 
         def coin_page(self):
             pass 
@@ -77,21 +73,21 @@ class Coins():
         sleep(randint(10,10000)/10000)
 
     def row_set(self,row={}):
-        row              = dict(row)
-        self.pk          = row.get('pk')
-        self.coin_name   = row.get('coin_name')
-        self.coin_symbol = row.get('coin_symbol')
-        self.coin_href   = row.get('coin_href')
+        row         = dict(row)
+        self.pk     = row.get('pk')
+        self.name   = row.get('name')
+        self.symbol = row.get('symbol')
+        self.href   = row.get('href')
 
 class SQLite():
 
     def __init__(self):
         self.path        = ' '
 
-    def add_coin(self, dbname="coins.db", coin_dict):
+    def add_coin(self, coin_dict):
 
         # open connection to db
-        conn = sqlite3.connect(dbname)
+        conn = sqlite3.connect("coins.db")
         cur  = conn.cursor()
 
         PARENT_SQL = """INSERT INTO coins (
@@ -109,6 +105,9 @@ class SQLite():
         # close connection to db
         conn.commit()
         conn.close()
+
+    def __exit__(self,exception_type,exception_value,exception_traceback):
+        sleep(randint(10,10000)/10000)
 
 
         

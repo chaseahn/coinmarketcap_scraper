@@ -12,9 +12,7 @@ def run(dbname='coins.db'):
         pk INTEGER PRIMARY KEY AUTOINCREMENT,
         name VARCHAR,
         symbol VARCHAR,
-        href INTEGER,sqli
-        CONSTRAINT unique_coinname UNIQUE(coinname)
-    );""")
+        href INTEGER);""")
 
     # CUR.execute("""DROP TABLE IF EXISTS search_terms;""")
     # #search term history
